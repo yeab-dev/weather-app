@@ -32,7 +32,7 @@ class MoreInfoCard extends StatelessWidget {
                       size: MediaQuery.sizeOf(context).height * 0.05,
                     ),
                     Text(
-                      "${windSpeed}km/s",
+                      "${windSpeed}m/s",
                       style: const TextStyle(color: Color(0xFF90F8FF)),
                     ),
                     const Text(

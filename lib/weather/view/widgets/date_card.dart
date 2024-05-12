@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
 class DateCard extends StatelessWidget {
-  const DateCard(this.date, {super.key});
+  const DateCard(this.date,
+      {required this.width, required this.height, super.key});
 
   final String? date;
+  final double width, height;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: MediaQuery.sizeOf(context).width * 0.5,
-        height: MediaQuery.sizeOf(context).height * 0.04,
+        width: width,
+        height: height,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF00274A),
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(9),
           ),
           child: Center(
             child: Text(

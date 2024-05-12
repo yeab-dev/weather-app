@@ -1,13 +1,13 @@
-import 'package:weather/weather/models/location.dart';
+import 'package:weather/weather/repositories/weather_repository.dart';
 
 sealed class Weather {
   Weather({
     this.maxTemperature,
     this.minTemperature,
-    required this.location,
+    this.location,
   });
 
-  Location location;
+  String? location;
   List<double>? maxTemperature;
   List<double>? minTemperature;
 }
@@ -15,23 +15,20 @@ sealed class Weather {
 class DailyWeather extends Weather {
   DailyWeather({
     required this.days,
-    required super.location,
     required super.minTemperature,
     required super.maxTemperature,
     required this.precipitationHours,
     required this.precipitationSums,
-    required this.weatherCodes,
+    required this.weatherType,
   });
 
   factory DailyWeather.fromJson(
     Map<String, dynamic> json,
-    Location location,
+    List<WeatherType> weatherType,
   ) {
     return DailyWeather(
-      location: location,
       days: (json["time"] as List).map((e) => (DateTime.parse(e))).toList(),
-      weatherCodes:
-          (json["weather_code"] as List).map((e) => e as int).toList(),
+      weatherType: weatherType,
       maxTemperature:
           (json["temperature_2m_max"] as List).map((e) => e as double).toList(),
       minTemperature:
@@ -44,7 +41,7 @@ class DailyWeather extends Weather {
     );
   }
 
-  final List<int> weatherCodes;
+  final List<WeatherType> weatherType;
   final List<double> precipitationHours;
   final List<double> precipitationSums;
   final List<DateTime> days;
@@ -59,8 +56,7 @@ class CurrentWeather extends Weather {
     required this.relativeHumidity,
   });
 
-  factory CurrentWeather.fromJson(
-      Map<String, dynamic> json, Location location) {
+  factory CurrentWeather.fromJson(Map<String, dynamic> json, String location) {
     return CurrentWeather(
         location: location,
         cloudCover: json["cloud_cover"],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:weather/weather/models/models.dart';
@@ -31,6 +33,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             currentWeather: weatherRepository.currentWeather,
             dailyWeather: weatherRepository.dailyWeather));
       } catch (e) {
+        log("${e.runtimeType}");
         emit(state.copyWith(status: WeatherStatus.failure));
       }
     }

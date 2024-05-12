@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class WeatherType extends StatelessWidget {
-  const WeatherType(this.type, {super.key});
-  final String type;
+  const WeatherType(this.weather, {super.key});
+  final String? weather;
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Text(
-        "Sunny",
-        style: TextStyle(
+        weather!,
+        style: const TextStyle(
             fontWeight: FontWeight.w500,
             color: Color(0xFF00274A),
             fontSize: 18),
