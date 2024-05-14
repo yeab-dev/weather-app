@@ -6,14 +6,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/weather/view/home_page.dart';
 
 class App extends MaterialApp {
-  App({super.key})
+  App(
+      {required this.weatherRepository,
+      required this.locationRepository,
+      required this.dio,
+      super.key})
       : super(
-            home: BlocProvider(
-          create: (context) => WeatherBloc(
-            weatherRepository: WeatherRepository(),
-            locationRepository: LocationRepository(),
-            dio: Dio(),
-          )..add(const WeatherFetched()),
+            home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (BuildContext context) => CurrentWeatherBloc(
+                    weatherRepository: weatherRepository,
+                    locationRepository: locationRepository,
+                    dio: dio)
+                  ..add(const WeatherFetched())),
+            BlocProvider(
+                create: (BuildContext context) => DailyWeatherBloc(
+                    weatherRepository: weatherRepository,
+                    locationRepository: locationRepository,
+                    dio: dio)
+                  ..add(const WeatherFetched())),
+          ],
           child: const HomePage(),
         ));
+
+  final WeatherRepository weatherRepository;
+  final Dio dio;
+  final LocationRepository locationRepository;
 }

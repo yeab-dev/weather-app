@@ -6,9 +6,9 @@ class MoreInfoCard extends StatelessWidget {
       required this.relativeHumidity,
       required this.cloudCover,
       super.key});
-  final double? windSpeed;
-  final int? relativeHumidity;
-  final int? cloudCover;
+  final double windSpeed;
+  final int relativeHumidity;
+  final int cloudCover;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -32,7 +32,7 @@ class MoreInfoCard extends StatelessWidget {
                       size: MediaQuery.sizeOf(context).height * 0.05,
                     ),
                     Text(
-                      "${windSpeed}m/s",
+                      "${windSpeed}km/h",
                       style: const TextStyle(color: Color(0xFF90F8FF)),
                     ),
                     const Text(

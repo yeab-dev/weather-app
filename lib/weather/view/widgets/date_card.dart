@@ -4,7 +4,7 @@ class DateCard extends StatelessWidget {
   const DateCard(this.date,
       {required this.width, required this.height, super.key});
 
-  final String? date;
+  final String date;
   final double width, height;
 
   @override
@@ -20,7 +20,7 @@ class DateCard extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              "$date",
+              date,
               style: const TextStyle(
                   color: Color(0xFF90F8FF), fontWeight: FontWeight.w600),
             ),

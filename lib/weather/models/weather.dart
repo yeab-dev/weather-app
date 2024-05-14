@@ -2,21 +2,17 @@ import 'package:weather/weather/repositories/weather_repository.dart';
 
 sealed class Weather {
   Weather({
-    this.maxTemperature,
-    this.minTemperature,
     this.location,
   });
 
   String? location;
-  List<double>? maxTemperature;
-  List<double>? minTemperature;
 }
 
 class DailyWeather extends Weather {
   DailyWeather({
     required this.days,
-    required super.minTemperature,
-    required super.maxTemperature,
+    required this.maxTemperature,
+    required this.minTemperature,
     required this.precipitationHours,
     required this.precipitationSums,
     required this.weatherType,
@@ -40,7 +36,8 @@ class DailyWeather extends Weather {
           (json["precipitation_sum"] as List).map((e) => e as double).toList(),
     );
   }
-
+  final List<double> maxTemperature;
+  final List<double> minTemperature;
   final List<WeatherType> weatherType;
   final List<double> precipitationHours;
   final List<double> precipitationSums;
@@ -50,14 +47,17 @@ class DailyWeather extends Weather {
 class CurrentWeather extends Weather {
   CurrentWeather({
     required super.location,
+    required this.weatherType,
     required this.cloudCover,
     required this.temperature,
     required this.windSpeed,
     required this.relativeHumidity,
   });
 
-  factory CurrentWeather.fromJson(Map<String, dynamic> json, String location) {
+  factory CurrentWeather.fromJson(
+      Map<String, dynamic> json, String location, WeatherType weatherType) {
     return CurrentWeather(
+        weatherType: weatherType,
         location: location,
         cloudCover: json["cloud_cover"],
         temperature: json["temperature_2m"],
@@ -68,6 +68,7 @@ class CurrentWeather extends Weather {
   final double windSpeed;
   final int relativeHumidity;
   final int cloudCover;
+  final WeatherType weatherType;
 }
 // class HourlyWeather extends Weather {
 //   HourlyWeather({

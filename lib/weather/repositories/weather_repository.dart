@@ -70,17 +70,21 @@ class WeatherRepository {
       "latitude": "${currentLocation.latitude}",
       "longitude": "${currentLocation.longitude}",
       "current":
-          "temperature_2m,relative_humidity_2m,wind_speed_10m,cloud_cover",
+          "temperature_2m,relative_humidity_2m,wind_speed_10m,cloud_cover,weather_code",
       "daily":
           "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_hours",
     });
     final weatherJson = weatherResponse.data as Map<String, dynamic>;
     final geoCodingJson = geoCodingResponse.data as Map<String, dynamic>;
-    String location = geoCodingJson["display_name"];
+    final data = geoCodingJson["address"];
+    log(data.toString());
+    final location = "${data["city"]}, ${data["country"]}";
     currentWeather = CurrentWeather.fromJson(
       weatherJson["current"],
-      location.substring(0, location.indexOf(",")),
+      location,
+      getWeatherType(weatherJson["current"]["weather_code"]),
     );
+
     dailyWeather = DailyWeather.fromJson(
         weatherJson["daily"],
         (weatherJson["daily"]["weather_code"] as List)

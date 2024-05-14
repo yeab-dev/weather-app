@@ -1,18 +1,18 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 import 'package:weather/weather/models/models.dart';
 import 'package:weather/weather/repositories/repositories.dart';
 part 'weather_event.dart';
 part 'weather_state.dart';
 
-class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherBloc(
+class CurrentWeatherBloc extends Bloc<WeatherEvent, CurrentWeatherState> {
+  CurrentWeatherBloc(
       {required this.weatherRepository,
       required this.locationRepository,
       required this.dio})
-      : super(const WeatherState(
+      : super(CurrentWeatherState(
+          currentWeather: weatherRepository.currentWeather,
           status: WeatherStatus.initial,
         )) {
     on<WeatherFetched>(onWetherFetched);
@@ -24,18 +24,28 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   Future<void> onWetherFetched(WeatherFetched event, Emitter emit) async {
     if (state.status == WeatherStatus.initial) {
-      emit(state.copyWith(status: WeatherStatus.inProgress));
-      try {
-        await weatherRepository.getWeatherData(
-            dio: dio, locationRepository: locationRepository);
-        emit(state.copyWith(
-            status: WeatherStatus.success,
-            currentWeather: weatherRepository.currentWeather,
-            dailyWeather: weatherRepository.dailyWeather));
-      } catch (e) {
-        log("${e.runtimeType}");
-        emit(state.copyWith(status: WeatherStatus.failure));
-      }
+      emit(state.copyWith(status: WeatherStatus.success));
     }
+  }
+}
+
+class DailyWeatherBloc extends Bloc<WeatherEvent, DailyWeatherState> {
+  DailyWeatherBloc(
+      {required this.weatherRepository,
+      required this.locationRepository,
+      required this.dio})
+      : super(DailyWeatherState(
+          dailyWeather: weatherRepository.dailyWeather,
+          status: WeatherStatus.initial,
+        )) {
+    on<WeatherFetched>(onWetherFetched);
+  }
+
+  final WeatherRepository weatherRepository;
+  final LocationRepository locationRepository;
+  final Dio dio;
+
+  Future<void> onWetherFetched(WeatherFetched event, Emitter emit) async {
+    emit(state.copyWith(status: WeatherStatus.success));
   }
 }

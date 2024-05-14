@@ -9,9 +9,9 @@ class WeeklyForecast extends StatelessWidget {
     required this.days,
     super.key,
   });
-  final List<double>? maxTemperatures;
-  final List<double>? minTemperatures;
-  final List<DateTime>? days;
+  final List<double> maxTemperatures;
+  final List<double> minTemperatures;
+  final List<DateTime> days;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -28,19 +28,19 @@ class WeeklyForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 DateCard(
-                  DateFormat.MMMEd().format(days![index + 1]),
+                  DateFormat.MMMEd().format(days[index + 1]),
                   width: MediaQuery.sizeOf(context).width * 0.3,
                   height: MediaQuery.sizeOf(context).height * 0.03,
                 ),
                 Row(
                   children: [
                     Text(
-                      "${maxTemperatures![index + 1].floor().toString()}°",
+                      "${maxTemperatures[index + 1].floor().toString()}°",
                       style: TextStyle(
                           fontSize: MediaQuery.sizeOf(context).height * 0.035),
                     ),
                     Text(
-                      "${minTemperatures![index + 1].floor().toString()}°",
+                      "${minTemperatures[index + 1].floor().toString()}°",
                       style: TextStyle(
                           fontSize: MediaQuery.sizeOf(context).height * 0.02),
                     ),
