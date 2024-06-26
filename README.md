@@ -1,3 +1,3 @@
 # weather
 
-A new Flutter project.
+A Flutter weather app
