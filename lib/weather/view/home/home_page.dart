@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:weather/weather/models/location.dart';
 
 import 'package:weather/weather/view/daily_forecast/daily_forecast.dart';
 import 'package:weather/weather/bloc/weather_bloc/weather_bloc.dart';
@@ -13,6 +15,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late Location currentLocation;
     return BlocListener<LocationBloc, LocationState>(
       listener: (context, state) {
         switch (state) {
@@ -30,6 +33,8 @@ class HomePage extends StatelessWidget {
             context
                 .read<WeatherBloc>()
                 .add(WeatherFetchRequested(location: state.location!));
+            currentLocation = state.location!;
+            break;
         }
       },
       child: BlocBuilder<WeatherBloc, WeatherState>(
@@ -42,8 +47,37 @@ class HomePage extends StatelessWidget {
             body: switch (weatherState) {
               WeatherInitial() =>
                 const Center(child: CircularProgressIndicator()),
-              WeatherFetchFailure() => Center(child: Text(weatherState.error)),
-              WeatherFetchInProgress() => const CircularProgressIndicator(),
+              WeatherFetchFailure() => Center(
+                    child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 30.0,
+                      top: MediaQuery.sizeOf(context).height * 0.08),
+                  child: Column(
+                    children: [
+                      Lottie.asset("assets/lotties/connection_error.json",
+                          repeat: false),
+                      Text(
+                        weatherState.error,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.25,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<WeatherBloc>().add(
+                              WeatherFetchRequested(location: currentLocation));
+                        },
+                        onLongPress: () {},
+                        child: const Text("Retry"),
+                      )
+                    ],
+                  ),
+                )),
+              WeatherFetchInProgress() =>
+                const Center(child: CircularProgressIndicator()),
               WeatherFetchSuccess() => SizedBox(
                   width: MediaQuery.sizeOf(context).width,
                   child: Column(

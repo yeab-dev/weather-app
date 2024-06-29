@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:weather/weather/models/models.dart';
-import 'package:weather/weather/repositories/location_repository.dart';
 
 enum WeatherType {
   clearSky,
@@ -58,36 +57,40 @@ class WeatherRepository {
   }) async {
     List<Weather> weatherData = <Weather>[];
     const weatherUri = "https://api.open-meteo.com/v1/forecast?";
-    final weatherResponse = await dio.get(weatherUri, queryParameters: {
-      "latitude": "${currentLocation.latitude}",
-      "longitude": "${currentLocation.longitude}",
-      "current":
-          "temperature_2m,relative_humidity_2m,wind_speed_10m,cloud_cover,weather_code",
-      "daily":
-          "weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,precipitation_hours,wind_speed_10m_max",
-    });
-    final weatherJson = weatherResponse.data as Map<String, dynamic>;
-    const geocodingUri = "https://geocode.maps.co/reverse?";
-    final geoCodingResponse = await dio.get(geocodingUri, queryParameters: {
-      "lat": "${currentLocation.latitude}",
-      "lon": "${currentLocation.longitude}",
-      "api_key": "6640996435980120701243jsz798863"
-    });
-    final geoCodingJson = geoCodingResponse.data as Map<String, dynamic>;
-    final addressName = geoCodingJson["address"];
-    log(addressName.toString());
-    final location = "${addressName["city"]}, ${addressName["country"]}";
-    weatherData.add(CurrentWeather.fromJson(
-      weatherJson["current"],
-      location,
-      getWeatherType(weatherJson["current"]["weather_code"]),
-    ));
+    try {
+      final weatherResponse = await dio.get(weatherUri, queryParameters: {
+        "latitude": "${currentLocation.latitude}",
+        "longitude": "${currentLocation.longitude}",
+        "current":
+            "temperature_2m,relative_humidity_2m,wind_speed_10m,cloud_cover,weather_code",
+        "daily":
+            "weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,precipitation_hours,wind_speed_10m_max",
+      });
+      const geocodingUri = "https://geocode.maps.co/reverse?";
+      final geoCodingResponse = await dio.get(geocodingUri, queryParameters: {
+        "lat": "${currentLocation.latitude}",
+        "lon": "${currentLocation.longitude}",
+        "api_key": "6640996435980120701243jsz798863"
+      });
+      final weatherJson = weatherResponse.data as Map<String, dynamic>;
+      final geoCodingJson = geoCodingResponse.data as Map<String, dynamic>;
+      final addressName = geoCodingJson["address"];
+      log(addressName.toString());
+      final location = "${addressName["city"]}, ${addressName["country"]}";
+      weatherData.add(CurrentWeather.fromJson(
+        weatherJson["current"],
+        location,
+        getWeatherType(weatherJson["current"]["weather_code"]),
+      ));
 
-    weatherData.add(DailyWeather.fromJson(
-        weatherJson["daily"],
-        (weatherJson["daily"]["weather_code"] as List)
-            .map((e) => getWeatherType(e))
-            .toList()));
+      weatherData.add(DailyWeather.fromJson(
+          weatherJson["daily"],
+          (weatherJson["daily"]["weather_code"] as List)
+              .map((e) => getWeatherType(e))
+              .toList()));
+    } on DioException {
+      return Future.error("Connection Error!");
+    }
     return weatherData;
   }
 

@@ -25,6 +25,23 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ButtonStyle(
+              backgroundColor:
+                  WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+                if (states.contains(WidgetState.pressed)) {
+                  return const Color(0xFF90F8FF);
+                }
+                return const Color(0xFF00274A);
+              }),
+              foregroundColor:
+                  WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+                if (states.contains(WidgetState.pressed)) {
+                  return const Color(0xFF00274A);
+                }
+                return const Color(0xFF90F8FF);
+              }),
+            )),
             scaffoldBackgroundColor: const Color(0xFF90F8FF),
             colorScheme: ColorScheme.fromSeed(
                 surface: const Color(0xFF90F8FF),

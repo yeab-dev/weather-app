@@ -22,13 +22,19 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   void _onWetherFetchRequested(
       WeatherFetchRequested event, Emitter emit) async {
+    emit(const WeatherFetchInProgress());
     List<Weather> weatherData = await WeatherRepositoryLocator.weatherRepository
         .getWeatherData(
-            dio: WeatherRepositoryLocator.dio,
-            currentLocation: event.location!);
-    emit(WeatherFetchSuccess(
-        currentWeather: weatherData[0] as CurrentWeather,
-        dailyWeather: weatherData[1] as DailyWeather));
+            dio: WeatherRepositoryLocator.dio, currentLocation: event.location!)
+        .onError((error, stackTrace) {
+      emit(WeatherFetchFailure(error: error.toString()));
+      return <Weather>[];
+    });
+    if (weatherData.isNotEmpty) {
+      emit(WeatherFetchSuccess(
+          currentWeather: weatherData[0] as CurrentWeather,
+          dailyWeather: weatherData[1] as DailyWeather));
+    }
   }
 
   void _onWeatherFetchFailed(WeatherFetchFailed event, Emitter emit) {
