@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather/weather/bloc/weather_bloc.dart';
+import 'package:weather/weather/bloc/location_bloc/location_bloc.dart';
+import 'package:weather/weather/bloc/weather_bloc/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/weather/repositories/services/services.dart';
 import 'package:weather/weather/view/home/home_page.dart';
@@ -12,19 +13,15 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (BuildContext context) => CurrentWeatherBloc(
+            create: (BuildContext context) => WeatherBloc(
                   weatherRepository: WeatherRepositoryLocator.weatherRepository,
                   locationRepository:
                       LocationRepositoryLocator.locationRepository,
                   dio: WeatherRepositoryLocator.dio,
-                )..add(const WeatherFetched())),
-        BlocProvider(
-            create: (BuildContext context) => DailyWeatherBloc(
-                  weatherRepository: WeatherRepositoryLocator.weatherRepository,
-                  locationRepository:
-                      LocationRepositoryLocator.locationRepository,
-                  dio: WeatherRepositoryLocator.dio,
-                )..add(const WeatherFetched())),
+                )),
+        BlocProvider<LocationBloc>(
+            create: (BuildContext context) =>
+                LocationBloc()..add(const LocationRetrivalRequested()))
       ],
       child: MaterialApp(
         theme: ThemeData(

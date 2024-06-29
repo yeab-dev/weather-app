@@ -8,8 +8,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   InjectionService.injectAll();
   Bloc.observer = WeatherObserver();
-  await WeatherRepositoryLocator.weatherRepository.getWeatherData(
-      dio: WeatherRepositoryLocator.dio,
-      locationRepository: LocationRepositoryLocator.locationRepository);
+
   runApp(const App());
 }

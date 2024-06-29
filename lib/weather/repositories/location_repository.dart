@@ -2,7 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather/models/models.dart';
 
 class LocationRepository {
-  Future<Location> getCurrentPosition() async {
+  Future<Location?> getCurrentPosition() async {
     bool serviceEnabled;
     LocationPermission locationPermission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();

@@ -1,4 +1,4 @@
-import "package:weather/weather/repositories/repositories.dart";
+import "package:weather/weather/repositories/_repositories.dart";
 
 import "../services/services.dart";
 

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:weather/weather/repositories/repositories.dart';
+import 'package:weather/weather/repositories/_repositories.dart';
 import 'package:weather/weather/repositories/services/services.dart';
 
 abstract class WeatherRepositoryLocator {

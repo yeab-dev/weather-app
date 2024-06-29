@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather/weather/bloc/weather_bloc.dart';
+import 'package:weather/weather/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather/weather/view/daily_forecast/widgets/widgets.dart';
 
 class DailyForeCastPage extends StatelessWidget {
   const DailyForeCastPage._();
 
-  static Route<void> route(DailyWeatherBloc dailyWeatherBloc) {
+  static Route<void> route(WeatherBloc dailyWeatherBloc) {
     return MaterialPageRoute(
         builder: (_) => BlocProvider.value(
               value: dailyWeatherBloc,
@@ -16,9 +16,11 @@ class DailyForeCastPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DailyWeatherBloc, DailyWeatherState>(
+    return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
-        List<int> maxTemperaturesOfTheWeek = state.dailyWeather.maxTemperature
+        List<int> maxTemperaturesOfTheWeek = (state as WeatherFetchSuccess)
+            .dailyWeather
+            .maxTemperature
             .map((temperature) => temperature.round())
             .toList();
         List<int> minTemperaturesOfTheWeek = state.dailyWeather.minTemperature
