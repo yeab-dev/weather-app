@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -27,6 +29,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         .getWeatherData(
             dio: WeatherRepositoryLocator.dio, currentLocation: event.location!)
         .onError((error, stackTrace) {
+      log("$error\n $stackTrace");
       emit(WeatherFetchFailure(error: error.toString()));
       return <Weather>[];
     });

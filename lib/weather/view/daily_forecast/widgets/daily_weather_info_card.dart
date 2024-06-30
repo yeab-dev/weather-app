@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:weather/weather/repositories/_repositories.dart';
+import 'package:weather/weather/view/daily_forecast/widgets/weather_type_icon_chooser.dart';
 
 class DailyWeatherInfoCard extends StatelessWidget {
   const DailyWeatherInfoCard(
       {required this.day,
       required this.weatherType,
-      required this.maxAndMinTemp,
+      required this.maxTemp,
+      required this.minTemp,
       super.key});
 
-  final String day;
-  final String weatherType;
-  final String maxAndMinTemp;
+  final DateTime day;
+  final WeatherType weatherType;
+  final double maxTemp;
+  final int minTemp;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,24 +29,39 @@ class DailyWeatherInfoCard extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Text(
-                day,
+                DateFormat.EEEE().format(day),
                 style: TextStyle(color: Theme.of(context).colorScheme.surface),
               )),
           Row(
             children: [
-              const Icon(Icons.sunny, color: Colors.yellow),
+              Icon(
+                chooseIcon(weatherType).iconData,
+                color: Theme.of(context).colorScheme.surface,
+              ),
               const SizedBox(width: 10),
               Text(
-                weatherType,
+                weatherType.formattedName,
                 style: TextStyle(color: Theme.of(context).colorScheme.surface),
               ),
             ],
           ),
           Padding(
               padding: const EdgeInsets.only(right: 15.0),
-              child: Text(
-                maxAndMinTemp,
-                style: TextStyle(color: Theme.of(context).colorScheme.surface),
+              child: Row(
+                children: [
+                  Text(
+                    "$maxTemp° ",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    "$minTemp°",
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.surface),
+                  ),
+                ],
               ))
         ],
       ),

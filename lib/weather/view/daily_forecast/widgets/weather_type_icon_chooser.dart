@@ -1,0 +1,67 @@
+import 'package:qweather_icons/qweather_icons.dart';
+import 'package:weather/weather/repositories/_repositories.dart';
+
+QWeatherIcons chooseIcon(WeatherType weatherType) {
+  switch (weatherType) {
+    case WeatherType.clearSky:
+      return QWeatherIcons.tag_100;
+    case WeatherType.mainlyClear:
+      return QWeatherIcons.tag_100;
+    case WeatherType.partlyCloudy:
+      return QWeatherIcons.tag_partly_cloudy;
+    case WeatherType.overcast:
+      return QWeatherIcons.tag_overcast;
+    case WeatherType.fog:
+      return QWeatherIcons.tag_fog;
+    case WeatherType.rimeFog:
+      return QWeatherIcons.tag_fog;
+    case WeatherType.lightDrizzle:
+      return QWeatherIcons.tag_drizzle_rain;
+    case WeatherType.moderateDrizzle:
+      return QWeatherIcons.tag_drizzle_rain;
+    case WeatherType.dendseDrizzle:
+      return QWeatherIcons.tag_drizzle_rain;
+    case WeatherType.lightFreezingDrizzle:
+      return QWeatherIcons.tag_freezing_drizzle;
+    case WeatherType.denseFreezingDrizzle:
+      return QWeatherIcons.tag_freezing_drizzle;
+    case WeatherType.slightRain:
+      return QWeatherIcons.tag_light_rain;
+    case WeatherType.moderateRain:
+      return QWeatherIcons.tag_moderate_rain;
+    case WeatherType.heavyRain:
+      return QWeatherIcons.tag_heavy_rain;
+    case WeatherType.lightFreezingRain:
+      return QWeatherIcons.tag_freezing_rain;
+    case WeatherType.heavyFreezingRain:
+      return QWeatherIcons.tag_freezing_rain;
+    case WeatherType.slightSnowFall:
+      return QWeatherIcons.tag_light_snow_fill;
+    case WeatherType.moderateSnowFall:
+      return QWeatherIcons.tag_heavy_snow_to_snowstorm;
+    case WeatherType.heavySnowFall:
+      return QWeatherIcons.tag_heavy_snow;
+    case WeatherType.snowGrains:
+      return QWeatherIcons.tag_snow;
+    case WeatherType.slightRainShowers:
+      return QWeatherIcons.tag_shower_rain;
+    case WeatherType.moderateRainShowers:
+      return QWeatherIcons.tag_shower_rain;
+    case WeatherType.violentRainShowers:
+      return QWeatherIcons.tag_heavy_shower_rain;
+    case WeatherType.slightSnowShowers:
+      return QWeatherIcons.tag_light_to_moderate_snow;
+    case WeatherType.heavySnowShowers:
+      return QWeatherIcons.tag_shower_snow;
+    case WeatherType.moderateThunderstorm:
+      return QWeatherIcons.tag_thunderstorm;
+    case WeatherType.slightThunderstorm:
+      return QWeatherIcons.tag_thunderstorm2;
+    case WeatherType.thunderStormWithSlightHail:
+      return QWeatherIcons.tag_thundershower_with_hail;
+    case WeatherType.thunderStormWithHeavyHail:
+      return QWeatherIcons.tag_thundershower_with_hail_fill;
+    case WeatherType.unknown:
+      return QWeatherIcons.tag_unknown;
+  }
+}

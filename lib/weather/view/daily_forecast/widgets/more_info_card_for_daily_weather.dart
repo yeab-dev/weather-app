@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:qweather_icons/qweather_icons.dart';
+import 'package:weather/weather/repositories/_repositories.dart';
+import 'package:weather/weather/view/daily_forecast/widgets/weather_type_icon_chooser.dart';
 
 class MoreInfoCardForDailyWeather extends StatelessWidget {
-  const MoreInfoCardForDailyWeather(
-      {required this.maxTemperaturesOfTheWeek,
-      required this.minTemperaturesOfTheWeek,
-      required this.windSpeedsOfTheWeek,
-      required this.humidityValuesOfTheWeek,
-      required this.cloudCoverValuesOfTheWeek,
-      super.key});
-  final List<int> maxTemperaturesOfTheWeek;
-  final List<int> minTemperaturesOfTheWeek;
-
-  final List<double> windSpeedsOfTheWeek;
-  final List<double> humidityValuesOfTheWeek;
-  final List<double> cloudCoverValuesOfTheWeek;
+  const MoreInfoCardForDailyWeather({
+    required this.weatherType,
+    required this.maxTemperature,
+    required this.minTemperature,
+    required this.windSpeedsOfTheWeek,
+    required this.rainSum,
+    required this.showerSum,
+    super.key,
+  });
+  final double maxTemperature;
+  final int minTemperature;
+  final double windSpeedsOfTheWeek;
+  final double rainSum;
+  final double showerSum;
+  final WeatherType weatherType;
   @override
   Widget build(BuildContext context) {
+    QWeatherIcons weatherIcon = chooseIcon(weatherType);
+
     ThemeData themeData = Theme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -38,10 +44,21 @@ class MoreInfoCardForDailyWeather extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        QWeatherIcons.tag_cloudy.iconData,
-                        size: 45,
-                        color: themeData.colorScheme.surface,
+                      Column(
+                        children: [
+                          Icon(
+                            weatherIcon.iconData,
+                            size: 45,
+                            color: themeData.colorScheme.surface,
+                          ),
+                          Text(
+                            weatherType.formattedName,
+                            style: TextStyle(
+                              color: themeData.colorScheme.surface,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
                       ),
                       Column(
                         children: [
@@ -53,7 +70,7 @@ class MoreInfoCardForDailyWeather extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${maxTemperaturesOfTheWeek[1]}/${minTemperaturesOfTheWeek[1]}",
+                            "$maxTemperature/$minTemperature",
                             style: TextStyle(
                               color: themeData.colorScheme.surface,
                               fontSize: 17,
@@ -76,11 +93,11 @@ class MoreInfoCardForDailyWeather extends StatelessWidget {
                             size: MediaQuery.sizeOf(context).height * 0.05,
                           ),
                           Text(
-                            "${windSpeedsOfTheWeek[0]}km/h",
+                            "${windSpeedsOfTheWeek}km/h",
                             style: const TextStyle(color: Color(0xFF90F8FF)),
                           ),
                           const Text(
-                            "Wind",
+                            "Max Wind Speed",
                             style: TextStyle(color: Color(0xFF90F8FF)),
                           )
                         ],
@@ -89,16 +106,19 @@ class MoreInfoCardForDailyWeather extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.water_drop_outlined,
+                            QWeatherIcons.tag_accumulated_rain2.iconData,
                             color: const Color(0xFF90F8FF),
-                            size: MediaQuery.sizeOf(context).height * 0.05,
+                            size: MediaQuery.sizeOf(context).height * 0.04,
                           ),
-                          Text(
-                            "${humidityValuesOfTheWeek[1]}%",
-                            style: const TextStyle(color: Color(0xFF90F8FF)),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "${rainSum}mm",
+                              style: const TextStyle(color: Color(0xFF90F8FF)),
+                            ),
                           ),
                           const Text(
-                            "Humidity",
+                            "Expected rain",
                             style: TextStyle(color: Color(0xFF90F8FF)),
                           )
                         ],
@@ -107,16 +127,16 @@ class MoreInfoCardForDailyWeather extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.cloud_outlined,
+                            QWeatherIcons.tag_shower_rain.iconData,
                             color: const Color(0xFF90F8FF),
                             size: MediaQuery.sizeOf(context).height * 0.05,
                           ),
                           Text(
-                            "${cloudCoverValuesOfTheWeek[1]}%",
+                            "${showerSum}mm",
                             style: const TextStyle(color: Color(0xFF90F8FF)),
                           ),
                           const Text(
-                            "Cloud cover",
+                            "Shower",
                             style: TextStyle(color: Color(0xFF90F8FF)),
                           )
                         ],

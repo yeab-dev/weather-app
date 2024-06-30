@@ -34,11 +34,14 @@ class CurrentWeather extends Weather {
 
 class DailyWeather extends Weather {
   DailyWeather({
+    required this.showersSum,
     required this.days,
+    required this.rainSum,
+    required this.windSpeed,
     required this.maxTemperature,
     required this.minTemperature,
     required this.precipitationHours,
-    required this.precipitationSums,
+    // required this.precipitationSums,
     required this.weatherType,
   });
 
@@ -48,6 +51,11 @@ class DailyWeather extends Weather {
   ) {
     return DailyWeather(
       days: (json["time"] as List).map((e) => (DateTime.parse(e))).toList(),
+      windSpeed: (json["wind_speed_10m_max"] as List)
+          .map((e) => (e as double))
+          .toList(),
+      showersSum:
+          (json["showers_sum"] as List).map((e) => (e as double)).toList(),
       weatherType: weatherType,
       maxTemperature:
           (json["temperature_2m_max"] as List).map((e) => e as double).toList(),
@@ -56,15 +64,17 @@ class DailyWeather extends Weather {
       precipitationHours: (json["precipitation_hours"] as List)
           .map((e) => e as double)
           .toList(),
-      precipitationSums:
-          (json["precipitation_sum"] as List).map((e) => e as double).toList(),
+      rainSum: (json["rain_sum"] as List).map((e) => e as double).toList(),
     );
   }
+  final List<double> rainSum;
+  final List<double> showersSum;
+  final List<double> windSpeed;
   final List<double> maxTemperature;
   final List<double> minTemperature;
   final List<WeatherType> weatherType;
   final List<double> precipitationHours;
-  final List<double> precipitationSums;
+  // final List<double> precipitationSums;
   final List<DateTime> days;
 }
 

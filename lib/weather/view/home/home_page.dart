@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +32,7 @@ class HomePage extends StatelessWidget {
             break;
 
           case LocationLoadSuccess():
+            log("latitude: ${state.location!.latitude}\nlongitude: ${state.location!.longitude}");
             context
                 .read<WeatherBloc>()
                 .add(WeatherFetchRequested(location: state.location!));

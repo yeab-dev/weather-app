@@ -64,7 +64,7 @@ class WeatherRepository {
         "current":
             "temperature_2m,relative_humidity_2m,wind_speed_10m,cloud_cover,weather_code",
         "daily":
-            "weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,precipitation_hours,wind_speed_10m_max",
+            "weather_code,temperature_2m_max,temperature_2m_min,rain_sum,precipitation_hours,wind_speed_10m_max,showers_sum",
       });
       const geocodingUri = "https://geocode.maps.co/reverse?";
       final geoCodingResponse = await dio.get(geocodingUri, queryParameters: {
@@ -73,10 +73,13 @@ class WeatherRepository {
         "api_key": "6640996435980120701243jsz798863"
       });
       final weatherJson = weatherResponse.data as Map<String, dynamic>;
+
       final geoCodingJson = geoCodingResponse.data as Map<String, dynamic>;
       final addressName = geoCodingJson["address"];
       log(addressName.toString());
-      final location = "${addressName["city"]}, ${addressName["country"]}";
+      final location = addressName["town"] == null
+          ? "${addressName["city"]}, ${addressName["country"]}"
+          : "${addressName["town"]}, ${addressName["country"]}";
       weatherData.add(CurrentWeather.fromJson(
         weatherJson["current"],
         location,
